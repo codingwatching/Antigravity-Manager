@@ -89,14 +89,89 @@ function AddAccountDialog({ onAdd }: AddAccountDialogProps) {
         }
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!refreshToken) {
             setStatus('error');
-            setMessage(t('accounts.add.status.error_token'));
+            setMessage(t('accounts.add.token.error_token'));
             return;
         }
-        // Email 传空字符串，后端会自动获取
-        handleAction(t('accounts.add_account'), () => onAdd("", refreshToken));
+
+        setStatus('loading');
+
+        // 1. 尝试解析输入
+        let tokens: string[] = [];
+        const input = refreshToken.trim();
+
+        try {
+            // 尝试解析为 JSON
+            if (input.startsWith('[') && input.endsWith(']')) {
+                const parsed = JSON.parse(input);
+                if (Array.isArray(parsed)) {
+                    tokens = parsed
+                        .map((item: any) => item.refresh_token)
+                        .filter((t: any) => typeof t === 'string' && t.startsWith('1//'));
+                }
+            }
+        } catch (e) {
+            // JSON 解析失败,忽略
+            console.debug('JSON parse failed, falling back to regex', e);
+        }
+
+        // 2. 如果 JSON 解析没有结果,尝试正则提取 (或者输入不是 JSON)
+        if (tokens.length === 0) {
+            const regex = /1\/\/[a-zA-Z0-9_\-]+/g;
+            const matches = input.match(regex);
+            if (matches) {
+                tokens = matches;
+            }
+        }
+
+        // 去重
+        tokens = [...new Set(tokens)];
+
+        if (tokens.length === 0) {
+            setStatus('error');
+            setMessage(t('accounts.add.token.error_token')); // 或者提示"未找到有效 Token"
+            return;
+        }
+
+        // 3. 批量添加
+        let successCount = 0;
+        let failCount = 0;
+
+        for (let i = 0; i < tokens.length; i++) {
+            const currentToken = tokens[i];
+            setMessage(t('accounts.add.token.batch_progress', { current: i + 1, total: tokens.length }));
+
+            try {
+                await onAdd("", currentToken);
+                successCount++;
+            } catch (error) {
+                console.error(`Failed to add token ${i + 1}:`, error);
+                failCount++;
+            }
+            // 稍微延迟一下,避免太快
+            await new Promise(r => setTimeout(r, 100));
+        }
+
+        // 4. 结果反馈
+        if (successCount === tokens.length) {
+            setStatus('success');
+            setMessage(t('accounts.add.token.batch_success', { count: successCount }));
+            setTimeout(() => {
+                setIsOpen(false);
+                resetState();
+            }, 1500);
+        } else if (successCount > 0) {
+            // 部分成功
+            setStatus('success'); // 还是用绿色,但提示部分失败
+            setMessage(t('accounts.add.token.batch_partial', { success: successCount, fail: failCount }));
+            // 不自动关闭,让用户看到结果
+        } else {
+            // 全部失败
+            setStatus('error');
+            setMessage(t('accounts.add.token.batch_fail'));
+        }
     };
 
     const handleOAuth = () => {

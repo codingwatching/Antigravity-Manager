@@ -101,8 +101,13 @@
             },
             "token": {
                 "label": "Refresh Token",
-                "placeholder": "Paste your Refresh Token here...",
-                "hint": "Tip: Paste Token and click 'Confirm' to auto-match account info."
+                "placeholder": "Paste your Refresh Token here (Batch supported)\n\nSupported formats:\n1. Single Token (1//...)\n2. JSON Array (with refresh_token field)\n3. Any text containing tokens (Auto-extraction)",
+                "hint": "Tip: You can paste multiple tokens or a JSON array to import in batch.",
+                "error_token": "Please enter Refresh Token",
+                "batch_progress": "Importing {{current}}/{{total}} accounts...",
+                "batch_success": "Successfully imported {{count}} accounts",
+                "batch_partial": "Import finished: {{success}} success, {{fail}} failed",
+                "batch_fail": "Import failed"
             },
             "import": {
                 "scheme_a": "Plan A: From IDE DB",

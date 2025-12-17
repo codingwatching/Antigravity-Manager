@@ -343,6 +343,9 @@ function Settings() {
                                 <div className="bg-gray-50 dark:bg-base-200 border border-gray-200 dark:border-base-300 rounded-lg p-3 mb-3">
                                     <p className="text-sm text-gray-600 dark:text-gray-400">{t('settings.advanced.logs_desc')}</p>
                                 </div>
+                                <div className="badge badge-primary badge-outline gap-2 font-mono">
+                                    v3.0.3
+                                </div>
                                 <div className="flex items-center gap-4">
                                     <button
                                         className="px-4 py-2 border border-gray-300 dark:border-base-300 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-base-200 transition-colors"
