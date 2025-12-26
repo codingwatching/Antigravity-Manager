@@ -581,7 +581,7 @@ print(response.text)`;
                                             value={appConfig.proxy.anthropic_mapping?.["claude-4.5-series"] || ""}
                                             onChange={(e) => handleMappingUpdate('anthropic', 'claude-4.5-series', e.target.value)}
                                         >
-                                            <option value="">gemini-3-pro-high (Default)</option>
+                                            <option value="">gemini-3-pro-high{t('proxy.router.default_suffix', ' (Default)')}</option>
                                             <optgroup label="Claude 4.5">
                                                 <option value="claude-opus-4-5-thinking">claude-opus-4-5-thinking</option>
                                                 <option value="claude-sonnet-4-5">claude-sonnet-4-5</option>
@@ -617,7 +617,7 @@ print(response.text)`;
                                             value={appConfig.proxy.anthropic_mapping?.["claude-3.5-series"] || ""}
                                             onChange={(e) => handleMappingUpdate('anthropic', 'claude-3.5-series', e.target.value)}
                                         >
-                                            <option value="">claude-sonnet-4-5-thinking{t('proxy.router.default_suffix', ' (Default)')}</option>
+                                            <option value="">claude-sonnet-4-5-thinking{t('proxy.router.default_suffix', '{t('proxy.router.default_suffix', ' (Default)')}')}</option>
                                             <optgroup label="Claude 4.5">
                                                 <option value="claude-opus-4-5-thinking">claude-opus-4-5-thinking</option>
                                                 <option value="claude-sonnet-4-5">claude-sonnet-4-5</option>
@@ -653,7 +653,7 @@ print(response.text)`;
                                             value={appConfig.proxy.openai_mapping?.["gpt-4-series"] || ""}
                                             onChange={(e) => handleMappingUpdate('openai', 'gpt-4-series', e.target.value)}
                                         >
-                                            <option value="">gemini-3-pro-high (Default)</option>
+                                            <option value="">gemini-3-pro-high{t('proxy.router.default_suffix', ' (Default)')}</option>
                                             <optgroup label="Gemini 3 (推荐)">
                                                 <option value="gemini-3-pro-high">gemini-3-pro-high (高质量)</option>
                                                 <option value="gemini-3-pro-low">gemini-3-pro-low (均衡)</option>
@@ -679,7 +679,7 @@ print(response.text)`;
                                             value={appConfig.proxy.openai_mapping?.["gpt-4o-series"] || ""}
                                             onChange={(e) => handleMappingUpdate('openai', 'gpt-4o-series', e.target.value)}
                                         >
-                                            <option value="">gemini-3-flash (Default)</option>
+                                            <option value="">gemini-3-flash{t('proxy.router.default_suffix', ' (Default)')}</option>
                                             <optgroup label="Gemini 3 (推荐)">
                                                 <option value="gemini-3-flash">gemini-3-flash (快速)</option>
                                                 <option value="gemini-3-pro-high">gemini-3-pro-high (高质量)</option>
@@ -705,7 +705,7 @@ print(response.text)`;
                                             value={appConfig.proxy.openai_mapping?.["gpt-5-series"] || ""}
                                             onChange={(e) => handleMappingUpdate('openai', 'gpt-5-series', e.target.value)}
                                         >
-                                            <option value="">gemini-3-flash (Default)</option>
+                                            <option value="">gemini-3-flash{t('proxy.router.default_suffix', ' (Default)')}</option>
                                             <optgroup label="Gemini 3 (推荐)">
                                                 <option value="gemini-3-flash">gemini-3-flash (快速)</option>
                                                 <option value="gemini-3-pro-high">gemini-3-pro-high (高质量)</option>
