@@ -358,6 +358,7 @@ export const ProxyMonitor: React.FC<ProxyMonitorProps> = ({ className }) => {
             await invoke('clear_proxy_logs');
             setLogs([]);
             setStats({ total_requests: 0, success_count: 0, error_count: 0 });
+            setTotalCount(0);
         } catch (e) {
             console.error("Failed to clear logs", e);
         }
