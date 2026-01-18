@@ -24,6 +24,7 @@ interface ProxyRequestLog {
     input_tokens?: number;
     output_tokens?: number;
     account_email?: string;
+    protocol?: string;  // "openai" | "anthropic" | "gemini"
 }
 
 interface ProxyStats {
@@ -541,7 +542,20 @@ export const ProxyMonitor: React.FC<ProxyMonitorProps> = ({ className }) => {
                                     </div>
                                 </div>
                                 <div className="mt-5 pt-5 border-t border-gray-200 dark:border-slate-700">
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                                        {selectedLog.protocol && (
+                                            <div className="space-y-1.5">
+                                                <span className="block text-gray-500 dark:text-slate-400 uppercase font-black text-[10px] tracking-widest">{t('monitor.details.protocol')}</span>
+                                                <span className={`inline-block px-2.5 py-1 rounded-md font-mono font-black text-xs uppercase ${
+                                                    selectedLog.protocol === 'openai' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/50' :
+                                                    selectedLog.protocol === 'anthropic' ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-400 border border-orange-200 dark:border-orange-800/50' :
+                                                    selectedLog.protocol === 'gemini' ? 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400 border border-blue-200 dark:border-blue-800/50' :
+                                                    'bg-gray-100 text-gray-700 dark:bg-gray-900/40 dark:text-gray-400'
+                                                }`}>
+                                                    {selectedLog.protocol}
+                                                </span>
+                                            </div>
+                                        )}
                                         <div className="space-y-1.5">
                                             <span className="block text-gray-500 dark:text-slate-400 uppercase font-black text-[10px] tracking-widest">{t('monitor.details.model')}</span>
                                             <span className="font-mono font-black text-blue-600 dark:text-blue-400 break-all text-sm">{selectedLog.model || '-'}</span>
