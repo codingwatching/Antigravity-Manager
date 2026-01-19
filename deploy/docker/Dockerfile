@@ -31,6 +31,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     procps \
     sudo \
     xdg-utils \
+    python3-xdg \
+    libgl1-mesa-dri \
+    pciutils \
+    x11-xserver-utils \
     && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
     && locale-gen \
     && groupadd --gid $USER_GID $USERNAME \
@@ -38,8 +42,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && echo "$USERNAME ALL=(ALL) NOPASSWD:/usr/bin/apt-get,/usr/bin/dpkg,/bin/rm" > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME \
     && mkdir -p /home/$USERNAME/.vnc /home/$USERNAME/.mozilla /home/$USERNAME/.antigravity_tools \
-    && echo "#!/bin/sh\nunset SESSION_MANAGER\nunset DBUS_SESSION_BUS_ADDRESS\nopenbox-session &\nexec /usr/bin/antigravity_tools" > /home/$USERNAME/.vnc/xstartup \
-    && chmod +x /home/$USERNAME/.vnc/xstartup \
     && chown -R $USERNAME:$USERNAME /home/$USERNAME \
     && apt-get autoremove -y \
     && apt-get clean \
@@ -69,6 +71,6 @@ USER antigravity
 WORKDIR /home/antigravity
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD pgrep -x Xtigervnc > /dev/null && pgrep -f novnc_proxy > /dev/null || exit 1
+    CMD pgrep -x Xtigervnc > /dev/null && pgrep -f websockify > /dev/null || exit 1
 
 CMD ["/home/antigravity/start.sh"]
