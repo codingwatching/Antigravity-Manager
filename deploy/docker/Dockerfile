@@ -10,11 +10,6 @@ ARG USERNAME=antigravity
 ARG USER_UID=1000
 ARG USER_GID=1000
 
-RUN sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true && \
-    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn\/debian-security/g' /etc/apt/sources.list.d/debian.sources 2>/dev/null || true && \
-    sed -i 's/deb.debian.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apt/sources.list 2>/dev/null || true && \
-    sed -i 's/security.debian.org/mirrors.tuna.tsinghua.edu.cn\/debian-security/g' /etc/apt/sources.list 2>/dev/null || true
-
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openbox \
     tigervnc-standalone-server \
