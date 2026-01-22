@@ -10,7 +10,7 @@ use bytes::Bytes;
 use futures::StreamExt;
 use serde_json::{json, Value};
 use tokio::time::{sleep, Duration};
-use tracing::{debug, error, info, warn};
+use tracing::{debug, error, info};
 
 use crate::proxy::mappers::claude::{
     transform_claude_request_in, transform_response, create_claude_sse_stream, ClaudeRequest,
@@ -19,13 +19,12 @@ use crate::proxy::mappers::claude::{
     models::{Message, MessageContent},
 };
 use crate::proxy::server::AppState;
-use crate::proxy::mappers::context_manager::{ContextManager, PurificationStrategy};
+use crate::proxy::mappers::context_manager::ContextManager;
 use crate::proxy::mappers::estimation_calibrator::get_calibrator;
 use axum::http::HeaderMap;
 use std::sync::{atomic::Ordering, Arc};
 
 const MAX_RETRY_ATTEMPTS: usize = 3;
-const MIN_SIGNATURE_LENGTH: usize = 10;  // 最小有效签名长度
 
 // ===== Model Constants for Background Tasks =====
 // These can be adjusted for performance/cost optimization
@@ -488,7 +487,7 @@ pub async fn handle_messages(
     let max_attempts = MAX_RETRY_ATTEMPTS.min(pool_size.saturating_add(1)).max(2);
 
     let mut last_error = String::new();
-    let mut retried_without_thinking = false;
+    let retried_without_thinking = false;
     let mut last_email: Option<String> = None;
     
     for attempt in 0..max_attempts {
@@ -697,7 +696,6 @@ pub async fn handle_messages(
                         );
                         
                         request_with_mapped = forked_request;
-                        compression_applied = true;
                         is_purified = false; // Fork doesn't break cache!
                         
                         // Re-estimate after fork (with calibration)
@@ -711,7 +709,6 @@ pub async fn handle_messages(
                         );
                         
                         estimated_usage = new_usage;
-                        usage_ratio = new_ratio;
                     }
                     Err(e) => {
                         error!(
